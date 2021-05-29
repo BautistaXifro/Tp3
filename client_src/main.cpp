@@ -13,7 +13,12 @@ int main(int argc, char* argv[]){
 
         Client client;
         client.start(argv[1], argv[2]);
-    } catch (...) {
+        
+    } catch (std::exception& e) {
+        std::cerr << e.what() << std::endl;
+        return 1;
+
+    }catch (...) {
         std::cerr << UNKNOWN_ERROR << std::endl;
         return 1;
     }

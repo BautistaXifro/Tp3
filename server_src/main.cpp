@@ -2,7 +2,7 @@
 #include "../common_src/socket_exception.h"
 #include <iostream>
 
-#definde UNKNOWN_ERROR "Se produjo un error desconocido en el servidor"
+#define UNKNOWN_ERROR "Se produjo un error desconocido en el servidor"
 
 int main(int argc, char* argv[]){
     try {
@@ -11,9 +11,13 @@ int main(int argc, char* argv[]){
             return 1;
         }
         Server server(argv[1]);
+
+        server.run();
+
     } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         return 1;
+
     } catch (...) {
         std::cerr << UNKNOWN_ERROR << std::endl;
         return 1;

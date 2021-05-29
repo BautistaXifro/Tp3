@@ -13,7 +13,7 @@ class Board{
     public:
         Board();
         void put(int& row, int& column, char charToInsert);
-        void print();
+        void print(std::string& buffer);
         int scan();
         ~Board();
 };

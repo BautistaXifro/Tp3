@@ -6,6 +6,8 @@ class Socket{
         int fd;
         explicit Socket(int specificFd) : fd(specificFd) {}
     public:
+        Socket(Socket&& other);
+        Socket& operator=(Socket&& other);
         Socket() : fd(-1) {};
         int connect(const char* hostname, const char* port);
         int bind(const char* port);

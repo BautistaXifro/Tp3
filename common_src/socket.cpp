@@ -21,6 +21,20 @@
 static int _getaddrinfo(struct addrinfo** serv_info,
              const char* hostname, const char* port);
 
+Socket::Socket(Socket&& other){
+    this->fd = other.fd;
+
+    other.fd = -1;
+}
+
+Socket& Socket::operator=(Socket&& other) {
+  if (this != &other && this->fd == -1) {
+    this->fd = other.fd;
+    other.fd = -1;
+  }
+  return *this;
+}
+
 
 static int _getaddrinfo(struct addrinfo** serv_info,
              const char* hostname, const char* port) {

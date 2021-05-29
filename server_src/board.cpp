@@ -93,9 +93,9 @@ int Board::scan(){
     return 0;
 }
 
-void Board::print(){
-    std::cout << this->firstLine + this->separator +  this->rows[0] + this->separator
-    + this->rows[1] + this->separator + this->rows[2] + this->separator << std::endl;
+void Board::print(std::string& buffer){
+    buffer = buffer + this->firstLine + this->separator +  this->rows[0] + this->separator
+    + this->rows[1] + this->separator + this->rows[2] + this->separator;
 }
 
 Board::~Board(){}
