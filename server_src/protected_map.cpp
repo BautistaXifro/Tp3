@@ -3,8 +3,11 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <atomic>
+#include <utility>
 
 void ProtectedMap::find(const std::string& key, Board*& value){
+    std::unique_lock<std::mutex> lock(this->protected_map_mutex);
     std::map<std::string, Board>::iterator iterator = 
                 this->map.find(key);
     if (iterator != this->map.end()){
@@ -14,12 +17,14 @@ void ProtectedMap::find(const std::string& key, Board*& value){
     std::cerr << "Error al encontrar la clave en el mapa\n";
 }
 
-void ProtectedMap::insert(const std::string& key){
-    this->map.insert(std::pair<std::string,
-            Board>(key, Board()));
+void ProtectedMap::insert(std::string& key){
+    std::unique_lock<std::mutex> lock(this->protected_map_mutex);
+
+    this->map.emplace(key, std::move(Board()));
 }
 
 void ProtectedMap::get_keys(std::string& buffer, const std::string& separator){
+    std::unique_lock<std::mutex> lock(this->protected_map_mutex);
     std::map<std::string, Board>::iterator iterator = 
                 this->map.begin();
     while (iterator != this->map.end()){

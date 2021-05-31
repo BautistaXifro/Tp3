@@ -25,8 +25,9 @@ void Client::start(const char* host, const char* port){
             std::cerr << "Error al ingresar comando." << std::endl;
             continue;
         }
+
         int buffer_length = fillBuffer(firstByte, input_line, buffer);
-        this->socket.send(buffer, buffer_length);
+        if (this->socket.send(buffer, buffer_length) < 0) break;
 
         int msg_length = receive_length();
         this->socket.receive(server_answer, msg_length);
@@ -71,8 +72,9 @@ int Client::fillBuffer(const short firstByte, std::string& line, char* buffer){
     buffer[0] = byte.buffer[1];
 
     if (firstByte == 112){
-        //fillPlayBuffer(line);
-        return 2;
+        buffer[1] = line[0] - 1;
+        buffer[2] = line[2] - 1;
+        return 3; // deberian ser dos
     }
     if(firstByte != 108){
         byte.number = htons(line.size());
@@ -86,4 +88,8 @@ int Client::fillBuffer(const short firstByte, std::string& line, char* buffer){
         return line.size() + 3; //los primeros 3 bytes
     }
     return 1;
+}
+
+Client::~Client(){
+    this->socket.close();
 }

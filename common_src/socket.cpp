@@ -14,8 +14,6 @@
 #define GETADDRINFO_ERROR "Error al obtener el getaddrinfo del cliente"
 #define BIND_ERROR "Error en socket bind"
 #define ACCEPT_ERROR "Error en socket accept"
-#define SEND_ERROR "Error en socket send"
-#define RECEIVE_ERROR "Error en socket receive"
 #define CONNECT_ERROR "Error en socket connect"
 
 static int _getaddrinfo(struct addrinfo** serv_info,
@@ -144,7 +142,7 @@ int Socket::send(const char* msg, unsigned int msg_length) {
                          bytes_pending, MSG_NOSIGNAL);
 
         if (bytes == -1){
-            throw SocketException(SEND_ERROR);
+            return -1;
         }else if (bytes == 0){
             break;
         }
@@ -164,7 +162,7 @@ int Socket::receive(char* buffer, int msg_length){
         int bytes = recv(this->fd, &buffer[bytes_received], max_bytes, 0);
 
         if (bytes == -1) {
-            throw SocketException(RECEIVE_ERROR);
+            return -1;
         }
 
         if (bytes == 0) {
