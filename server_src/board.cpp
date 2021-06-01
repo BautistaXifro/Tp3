@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <utility>
 
 Board::Board(){
     this->firstLine = "    1 . 2 . 3 .\n";
@@ -13,10 +13,10 @@ Board::Board(){
     this->rows.push_back(firstRow);
     this->rows.push_back(secondRow);
     this->rows.push_back(thirdRow);
-    for(int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++){
         std::vector<char> vector;
         this->matrix.push_back(vector);
-        for(int j = 0; j < 3; j++){
+        for (int j = 0; j < 3; j++){
             this->matrix[i].push_back(' ');
         }
     }
@@ -33,7 +33,7 @@ Board::Board(Board&& other){
     this->allowedToPrint = true;
 }
 
-void Board::put(int& column, int& row, const char& charToInsert){
+void Board::put(const int& column, const int& row, const char& charToInsert){
     std::unique_lock<std::mutex> lock(this->board_mutex);
 
     this->matrix[row][column] = charToInsert;
@@ -51,42 +51,42 @@ void Board::put(int& column, int& row, const char& charToInsert){
 
 std::string Board::scan(const char& simbol){
     int Winner, blankSpace, totalBlancks;
-    std::string finish_line;
     Winner = blankSpace = totalBlancks = 0;
     for (int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
+        for (int j = 0; j < 3; j++){
             if (this->matrix[i][j] == simbol){
                 Winner++;
-            } else if(this->matrix[i][j] == ' '){
+            } else if (this->matrix[i][j] == ' '){
                 blankSpace++;
                 totalBlancks++;
                 break;
             }
         }
         if (Winner == 3) return "Felicitaciones! Ganaste!\n";
-        if (blankSpace == 0 && Winner == 0) return "Has perdido. Segui intentandolo!\n";
+        if (blankSpace == 0 && Winner == 0)
+             return "Has perdido. Segui intentandolo!\n";
         Winner = 0;
         blankSpace = 0;
     }
 
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
-            if(this->matrix[j][i] == simbol){
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+            if (this->matrix[j][i] == simbol){
                 Winner++;
-            
-            }else if(this->matrix[j][i] == ' '){
+            }else if (this->matrix[j][i] == ' '){
                 blankSpace++;
                 totalBlancks++;
                 break;
             }
         }
         if (Winner == 3) return "Felicitaciones! Ganaste!\n";
-        if (blankSpace == 0 && Winner == 0) return "Has perdido. Segui intentandolo!\n";
+        if (blankSpace == 0 && Winner == 0)
+             return "Has perdido. Segui intentandolo!\n";
         Winner = 0;
         blankSpace = 0;
     }
 
-    for(int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++){
         if (this->matrix[i][i] == simbol){
             Winner++;
         }else if (this->matrix[i][i] == ' '){
@@ -96,11 +96,12 @@ std::string Board::scan(const char& simbol){
         }
     }
     if (Winner == 3) return "Felicitaciones! Ganaste!\n";
-    if (blankSpace == 0 && Winner == 0) return "Has perdido. Segui intentandolo!\n";
+    if (blankSpace == 0 && Winner == 0)
+         return "Has perdido. Segui intentandolo!\n";
     Winner = 0;
     blankSpace = 0;
     int j = 2;
-    for(int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++){
         if (this->matrix[i][j] == simbol){
             Winner++;
         }else if (this->matrix[i][j] == ' '){
@@ -111,7 +112,8 @@ std::string Board::scan(const char& simbol){
         j--;
     }
     if (Winner == 3) return "Felicitaciones! Ganaste!\n";
-    if (blankSpace == 0 && Winner == 0) return "Has perdido. Segui intentandolo!\n";
+    if (blankSpace == 0 && Winner == 0) 
+        return "Has perdido. Segui intentandolo!\n";
     if (totalBlancks == 0) return "La partida ha terminado en empate\n";
 
     return "";
@@ -123,12 +125,15 @@ int Board::print(std::string& buffer, const char& simbol){
         this->cond_var.wait(lock);
     }
     std::string end_line = scan(simbol);
-    buffer = buffer + this->firstLine + this->separator +  this->rows[0] + this->separator
-    + this->rows[1] + this->separator + this->rows[2] + this->separator + end_line;
+    buffer = buffer + this->firstLine + this->separator 
+    +  this->rows[0] + this->separator
+    + this->rows[1] + this->separator + this->rows[2] 
+    + this->separator + end_line;
+
     this->allowedToPrint = false;
     this->isMyTurn = false;
     this->cond_var.notify_all();
-    if(end_line != ""){
+    if (end_line != ""){
         this->allowedToPrint = true;
         return 1;
     }

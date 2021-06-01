@@ -75,7 +75,7 @@ int Socket::connect(const char* hostname, const char* port){
 
     freeaddrinfo(head);
 
-    if(!connected){
+    if (!connected){
         throw SocketException(CONNECT_ERROR);
     }
 

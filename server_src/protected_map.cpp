@@ -29,6 +29,6 @@ void ProtectedMap::get_keys(std::string& buffer, const std::string& separator){
                 this->map.begin();
     while (iterator != this->map.end()){
         buffer = buffer + separator + iterator->first;
-        iterator++;
+        ++iterator;
     }
 }

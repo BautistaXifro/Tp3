@@ -89,7 +89,7 @@ int Client::fillBuffer(const short firstByte, std::string& line, char* buffer){
         buffer[1] = finalValue;
         return 2;
     }
-    if(firstByte != 108){
+    if (firstByte != 108){
         byte.number = htons(line.size());
 
         buffer[1] = byte.buffer[0];
@@ -103,15 +103,15 @@ int Client::fillBuffer(const short firstByte, std::string& line, char* buffer){
     return 1;
 }
 
-void Client::playState(int& bytesCheck){
+void Client::playState(const int& bytesCheck){
     bool gameFinish = false;
-    while(!gameFinish){
+    while (!gameFinish){
         char buffer[MAX_BUFF_LENGTH], server_answer[MAX_BUFF_LENGTH];
         std::string input_line;
         short firstByte;
         getline(std::cin, input_line);
         if (input_line.compare(0, 6, "jugar ") != 0){
-            std::cerr << "Error al ingresar comando solo utilizar el comando jugar."
+            std::cerr << "Error al ingresar comando."
                      << std::endl;
             continue;
         }

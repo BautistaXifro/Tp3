@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <atomic>
+#include <string>
 
 #define MAX_BUFFER_LENGTH 256
 #define PLAY 112
@@ -16,10 +17,12 @@ void static set_to_send_length(char* buffer, const short& length);
 ClientManager::ClientManager(Socket socket, ProtectedMap& m) : 
     socket_client(std::move(socket)), map(m){
         this->finish = false;
+        this->board = nullptr;
+        this->simbol = ' ';
     }
 
 void ClientManager::run(){
-    while(!this->finish){
+    while (!this->finish){
         char firstByte[1];
         this->socket_client.receive(firstByte, 1);
         union{
@@ -29,7 +32,7 @@ void ClientManager::run(){
         byte.number = 0;
         byte.buffer[1] = firstByte[0];
         int client_command = ntohs(byte.number);
-        switch(client_command){
+        switch (client_command){
             case PLAY:
                 play();
                 break;

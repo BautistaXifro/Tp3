@@ -8,7 +8,7 @@ class Socket{
     public:
         Socket(Socket&& other);
         Socket& operator=(Socket&& other);
-        Socket() : fd(-1) {};
+        Socket() : fd(-1) {}
         int connect(const char* hostname, const char* port);
         int bind(const char* port);
         Socket accept();

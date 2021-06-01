@@ -23,6 +23,5 @@ class ClientManager : public Thread{
         void play();
         bool gameFinish();
         ~ClientManager();
-
 };
 #endif
