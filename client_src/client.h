@@ -10,6 +10,7 @@ class Client {
         void start(const char* host, const char* port);
         int fillBuffer(const short value, std::string& line, char* buffer);
         int receive_length();
+        void playState(int& bytesCheck);
         ~Client();
 };
 #endif

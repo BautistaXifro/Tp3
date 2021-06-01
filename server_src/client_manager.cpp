@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <atomic>
+
 #define MAX_BUFFER_LENGTH 256
 #define PLAY 112
 #define CREATE 110
@@ -92,10 +93,11 @@ void ClientManager::join_game(){
 }
 
 void ClientManager::play(){
-    char buffer[2];
-    this->socket_client.receive(buffer, 2);
-    int column = buffer[0] - 48;
-    int row = buffer[1] - 48;
+    char buffer[1];
+    this->socket_client.receive(buffer, 1);
+    uint8_t value = buffer[0];
+    int column = (int) value >> 4;
+    int row = (int) value & 15;
     this->board->put(column, row, this->simbol);
     print_board();
 }

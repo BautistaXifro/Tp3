@@ -5,14 +5,13 @@
 
 Server::Server(const char* port){
     this->server_socket.bind(port);
-    this->end = false;
 }
 
 void Server::run(){
     try{
-        while (!end){
+        while (true){
         this->clients.push_back(new ClientManager(
-                    std::move(this->server_socket.accept()), this->map));
+            std::move(this->server_socket.accept()), this->map));
         this->clients.back()->start();
         remove_client();
         }
@@ -37,6 +36,11 @@ void Server::remove_client(){
     }
 }
 void Server::stop(){
-    this->end = true;
     this->server_socket.close();
+}
+
+Server::~Server(){
+    while (!this->clients.empty()){
+        remove_client();
+    }
 }
