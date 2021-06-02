@@ -10,7 +10,8 @@ class ClientManager : public Thread{
     private:
         Socket socket_client;
         ProtectedMap& map;
-        Board* board;
+        ProtectedQueue* queue;
+        Board board;
         char simbol;
         std::atomic<bool> finish;
     public:

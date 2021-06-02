@@ -22,7 +22,7 @@ class Board{
     public:
         Board();
         Board(Board&& other);
-        void put(const int& column, const int& row, const char& charToInsert);
+        int put(const int& column, const int& row, const char& charToInsert);
         int print(std::string& buffer, const char& simbol);
         std::string scan(const char& simbol);
         ~Board();

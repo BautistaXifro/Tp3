@@ -33,19 +33,11 @@ Board::Board(Board&& other){
     this->allowedToPrint = true;
 }
 
-void Board::put(const int& column, const int& row, const char& charToInsert){
-    std::unique_lock<std::mutex> lock(this->board_mutex);
-
+int Board::put(const int& column, const int& row, const char& charToInsert){
     this->matrix[row][column] = charToInsert;
     this->rows[row].replace(this->positions[column], 1, 1, charToInsert);
-
-    this->allowedToPrint = true;
-    this->isMyTurn = true;
-    this->cond_var.notify_all();
-    while (this->isMyTurn.load()){
-       this->cond_var.wait(lock);
-    }
-    this->isMyTurn = true;
+    if (scan(charToInsert) != "") return 1;
+    return 0;
 }
 
 
@@ -64,7 +56,7 @@ std::string Board::scan(const char& simbol){
         }
         if (Winner == 3) return "Felicitaciones! Ganaste!\n";
         if (blankSpace == 0 && Winner == 0)
-             return "Has perdido. Segui intentandolo!\n";
+             return "Has perdido. Segui intentando!\n";
         Winner = 0;
         blankSpace = 0;
     }
@@ -81,7 +73,7 @@ std::string Board::scan(const char& simbol){
         }
         if (Winner == 3) return "Felicitaciones! Ganaste!\n";
         if (blankSpace == 0 && Winner == 0)
-             return "Has perdido. Segui intentandolo!\n";
+             return "Has perdido. Segui intentando!\n";
         Winner = 0;
         blankSpace = 0;
     }
@@ -97,7 +89,7 @@ std::string Board::scan(const char& simbol){
     }
     if (Winner == 3) return "Felicitaciones! Ganaste!\n";
     if (blankSpace == 0 && Winner == 0)
-         return "Has perdido. Segui intentandolo!\n";
+         return "Has perdido. Segui intentando!\n";
     Winner = 0;
     blankSpace = 0;
     int j = 2;
@@ -113,28 +105,19 @@ std::string Board::scan(const char& simbol){
     }
     if (Winner == 3) return "Felicitaciones! Ganaste!\n";
     if (blankSpace == 0 && Winner == 0) 
-        return "Has perdido. Segui intentandolo!\n";
+        return "Has perdido. Segui intentando!\n";
     if (totalBlancks == 0) return "La partida ha terminado en empate\n";
 
     return "";
 }
 
 int Board::print(std::string& buffer, const char& simbol){
-    std::unique_lock<std::mutex> lock(this->board_mutex);
-    while (!this->allowedToPrint.load()){
-        this->cond_var.wait(lock);
-    }
     std::string end_line = scan(simbol);
     buffer = buffer + this->firstLine + this->separator 
     +  this->rows[0] + this->separator
     + this->rows[1] + this->separator + this->rows[2] 
     + this->separator + end_line;
-
-    this->allowedToPrint = false;
-    this->isMyTurn = false;
-    this->cond_var.notify_all();
     if (end_line != ""){
-        this->allowedToPrint = true;
         return 1;
     }
     return 0;

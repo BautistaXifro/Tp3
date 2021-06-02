@@ -2,6 +2,7 @@
 #include "../common_src/socket_exception.h"
 #include <vector>
 #include <utility>
+#include <iostream>
 
 
 Server::Server(const char* port){

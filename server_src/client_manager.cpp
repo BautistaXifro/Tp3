@@ -17,8 +17,8 @@ void static set_to_send_length(char* buffer, const short& length);
 ClientManager::ClientManager(Socket socket, ProtectedMap& m) : 
     socket_client(std::move(socket)), map(m){
         this->finish = false;
-        this->board = nullptr;
         this->simbol = ' ';
+        this->queue = nullptr;
     }
 
 void ClientManager::run(){
@@ -35,15 +35,18 @@ void ClientManager::run(){
         switch (client_command){
             case PLAY:
                 play();
+                print_board();
                 break;
             case CREATE:
                 create();
+                print_board();
                 break;
             case LIST:
                 list();
                 break;
             case JOIN:
                 join_game();
+                print_board();
                 break;
             default:
                 std::cerr << "Error en el comando de cliente\n";
@@ -60,9 +63,8 @@ void ClientManager::create(){
     this->socket_client.receive(game_name, name_length);
     std::string game(game_name);
     this->map.insert(game);
-    this->map.find(game, this->board);
+    this->map.find(game, this->queue);
     this->simbol = 'O';
-    print_board();
 }
 
 void ClientManager::list(){
@@ -90,9 +92,11 @@ void ClientManager::join_game(){
     this->socket_client.receive(game_name, name_length);
     std::string game(game_name);
 
-    this->map.find(game, this->board);
+    this->map.find(game, this->queue);
     this->simbol = 'X';
-    print_board();
+    
+    std::vector<int> values = this->queue->pop();
+    this->board.put(values[0], values[1], values[2]);
 }
 
 void ClientManager::play(){
@@ -101,14 +105,19 @@ void ClientManager::play(){
     uint8_t value = buffer[0];
     int column = (int) value >> 4;
     int row = (int) value & 15;
-    this->board->put(column, row, this->simbol);
-    print_board();
+    int aux[] = {column, row, this->simbol};
+    std::vector<int> values(aux, aux + 3);
+    this->queue->push(values);
+    if (this->board.put(column, row, this->simbol) == 1) return;
+    std::vector<int> otherPlayerValues = this->queue->pop();
+    this->board.put(otherPlayerValues[0], 
+            otherPlayerValues[1], otherPlayerValues[2]);
 }
 
 void ClientManager::print_board(){
     char buffer[MAX_BUFFER_LENGTH];
     std::string string_board("  ");
-    if (this->board->print(string_board, this->simbol) == 1){
+    if (this->board.print(string_board, this->simbol) == 1){
         this->finish = true;
     }
     short board_length = string_board.copy(buffer, string_board.size(), 0);
