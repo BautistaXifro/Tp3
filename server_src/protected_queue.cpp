@@ -10,7 +10,6 @@ ProtectedQueue::ProtectedQueue(ProtectedQueue&& other){
     this->queue = std::move(other.queue);
 }
 
-//PRE: el string enviado tiene la forma de una URL.
 void ProtectedQueue::push(const std::vector<int>& values){
     std::unique_lock<std::mutex> lock(this->queue_mutex);
     this->queue.push(values);
