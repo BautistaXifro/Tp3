@@ -13,8 +13,8 @@ La idea de este tp es unir lo aprendido en el tp1 (cliente servidor, TDA) con lo
 <br><p align="center"><img src="img/ClassDiagram.jpeg"/></p>
 
 El main del servidor crea un thread ```Server``` el cual se encarga de *bindearse* y aceptar clientes y cuando no esta bloquedo en *accept* realiza trabajo de limpieza.
-Este thread cuando acepta clientes, por su parte, 1 thread por cada cliente que acepta ```ClientManager```. Esta clase se encarga de tener la conversación con el cliente
-y por lo tanto es quien maneja los inputs y outputs del juego. Para esto se ayuda de un ```ProtectedMap``` el cual se inicializo en ```Server``` y es donde se guardan todas las partidas
+Este thread cuando acepta clientes, por su parte, crea 1 thread, ```ClientManager```, por cada cliente que acepta. Esta clase se encarga de tener la conversación con el cliente
+y por lo tanto es quien maneja los inputs y outputs del juego. Para esto se ayuda de un ```ProtectedMap``` el cual se inicializó en ```Server``` y es donde se guardan todas las partidas
 que existen en el server, ```ProtectedQueue``` se utiliza para que dos clientes puedan jugar entre ellos, esta clase se encarga de ser una queue bloqueante la cual cuando un cliente
 hace su jugada ésta es mandada a la queue para que el otro thread ```ClientManager``` pueda hacer un pop y obtener esa jugada. Por ultimo existe la clase ```Board``` la cual
 es la encargada de mantener el tablero actualizarse por cada jugada y escanearse para informar si alguien gano o se empato.
@@ -30,4 +30,4 @@ de los sockets que tanto cliente como servidor hacen uso.
 
 ## Conclusión
 En este tp pude darme cuenta de lo mucho que se puede hacer utilizando estos conceptos que se enseñaron hasta ahora. Si bien es un juego muy simple la idea de que pueda
-manejar varios clientes al mismo tiempo me hizo darme cuenta que se pueden realizar muchas cosas. Esto mas los conceptos mas *teóricos* como el ownership o TDA hacen de un código mucho mas limpio y entendible.
+manejar varios clientes al mismo tiempo hizo darme cuenta que se pueden realizar muchas cosas. Esto más los conceptos *teóricos* como el ownership y TDA hacen de un código mucho mas limpio y entendible.
