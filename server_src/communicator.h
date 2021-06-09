@@ -6,13 +6,9 @@
 class Communicator {
     private:
         Socket socket_client;
-        union{
-            short number;
-            char buffer[2];
-        }byte;
     public:
-        Communicator(Socket socket);
-        int send(const std::string bufToSend);
+        explicit Communicator(Socket socket);
+        int send(const std::string& bufToSend);
         int receive(std::string& buffer);
         int receive_first();
         std::vector<int> receive_play();
