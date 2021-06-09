@@ -5,10 +5,11 @@
 #include "../common_src/socket.h"
 #include "protected_map.h"
 #include <atomic>
+#include "communicator.h"
 
 class ClientManager : public Thread{
     private:
-        Socket socket_client;
+        Communicator communicator;
         ProtectedMap& map;
         ProtectedQueue* queue;
         Board board;
@@ -23,6 +24,5 @@ class ClientManager : public Thread{
         void join_game();
         void play();
         bool gameFinish();
-        ~ClientManager();
 };
 #endif

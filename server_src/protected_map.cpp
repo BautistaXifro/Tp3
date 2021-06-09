@@ -17,10 +17,12 @@ void ProtectedMap::find(const std::string& key, ProtectedQueue*& value){
     std::cerr << "Error al encontrar la clave en el mapa\n";
 }
 
-void ProtectedMap::insert(std::string& key){
+ProtectedQueue* ProtectedMap::insert(std::string& key){
     std::unique_lock<std::mutex> lock(this->protected_map_mutex);
 
     this->map.emplace(key, std::move(ProtectedQueue()));
+
+    return &this->map.at(key);
 }
 
 void ProtectedMap::get_keys(std::string& buffer, const std::string& separator){

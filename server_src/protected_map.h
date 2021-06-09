@@ -10,7 +10,7 @@ class ProtectedMap {
         std::mutex protected_map_mutex;
     public:
         void find(const std::string& key, ProtectedQueue*& value);
-        void insert(std::string& key);
+        ProtectedQueue* insert(std::string& key);
         void get_keys(std::string& buffer, const std::string& separator);
 };
 #endif
