@@ -6,15 +6,15 @@
 #include <atomic>
 #include <utility>
 
-void ProtectedMap::find(const std::string& key, ProtectedQueue*& value){
+int ProtectedMap::find(const std::string& key, ProtectedQueue*& value){
     std::unique_lock<std::mutex> lock(this->protected_map_mutex);
     std::map<std::string, ProtectedQueue>::iterator iterator = 
                 this->map.find(key);
     if (iterator != this->map.end()){
         value = &iterator->second;
-        return;
+        return 0;
     }
-    std::cerr << "Error al encontrar la clave en el mapa\n";
+    return 1;
 }
 
 ProtectedQueue* ProtectedMap::insert(std::string& key){

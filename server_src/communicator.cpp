@@ -56,25 +56,18 @@ void Communicator::set_to_send_length(char* buffer, const short& length){
         char buffer[2];
     }byte;
     byte.number = 0;
+    
     byte.number = htons(length);
     buffer[0] = byte.buffer[0];
     buffer[1] = byte.buffer[1];
 }
 
 int Communicator::get_length(){
-    union{
-        short number;
-        char buffer[2];
-    }byte;
-
-    byte.number = 0;
-
     char length[2];
     this->socket_client.receive(length, 2);
 
-    byte.buffer[0] = length[0];
-    byte.buffer[1] = length[1];
-    return ntohs(byte.number);
+    short number = *(short*)(length);
+    return ntohs(number);
 }
 
 Communicator::~Communicator(){

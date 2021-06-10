@@ -49,16 +49,9 @@ void Client::start(const char* host, const char* port){
 int Client::receive_length(){
     char buffer[2];
     this->socket.receive(buffer, 2);
-    union{
-        short number;
-        char buffer[2];
-    }byte;
-    byte.number = 0;
-  
-    byte.buffer[0] = buffer[0];
-    byte.buffer[1] = buffer[1];
 
-    return ntohs(byte.number);
+    short number = *(short*)(buffer);
+    return ntohs(number);
 }
 
 //PRE: el cliente manda crear o unirse o jugar seguido de un espacio

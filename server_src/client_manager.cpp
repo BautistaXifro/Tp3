@@ -63,7 +63,8 @@ void ClientManager::list(){
 void ClientManager::join_game(){
     std::string game;
     this->communicator.receive(game);
-    this->map.find(game, this->queue);
+    while (this->map.find(game, this->queue) == 1){}
+    //this->map.find(game, this->queue);
     this->simbol = 'X';
     
     std::vector<int> values = this->queue->pop();
