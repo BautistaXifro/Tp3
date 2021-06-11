@@ -3,18 +3,16 @@
 #include <string>
 #include <map>
 #include <iostream>
-#include <atomic>
 #include <utility>
+#include <condition_variable>
 
-int ProtectedMap::find(const std::string& key, ProtectedQueue*& value){
+void ProtectedMap::find(const std::string& key, ProtectedQueue*& value){
     std::unique_lock<std::mutex> lock(this->protected_map_mutex);
-    std::map<std::string, ProtectedQueue>::iterator iterator = 
-                this->map.find(key);
-    if (iterator != this->map.end()){
-        value = &iterator->second;
-        return 0;
+    std::map<std::string, ProtectedQueue>::iterator iterator;
+    while ((iterator = this->map.find(key)) == this->map.end()){
+        this->cond_var.wait(lock);
     }
-    return 1;
+    value = &iterator->second;
 }
 
 ProtectedQueue* ProtectedMap::insert(std::string& key){
@@ -22,6 +20,7 @@ ProtectedQueue* ProtectedMap::insert(std::string& key){
 
     this->map.emplace(key, std::move(ProtectedQueue()));
 
+    this->cond_var.notify_all();
     return &this->map.at(key);
 }
 

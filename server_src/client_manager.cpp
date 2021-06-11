@@ -20,10 +20,8 @@ ClientManager::ClientManager(Socket socket, ProtectedMap& m) :
     }
 
 void ClientManager::run(){
-    while (!this->finish){
-        int client_command = 
-            this->communicator.receive_first();
-        switch (client_command){
+    while (!this->finish.load()){
+        switch (this->communicator.receive_first()){
             case PLAY:
                 play();
                 print_board();
@@ -63,8 +61,7 @@ void ClientManager::list(){
 void ClientManager::join_game(){
     std::string game;
     this->communicator.receive(game);
-    while (this->map.find(game, this->queue) == 1){}
-    //this->map.find(game, this->queue);
+    this->map.find(game, this->queue);
     this->simbol = 'X';
     
     std::vector<int> values = this->queue->pop();
