@@ -65,7 +65,6 @@ void ClientManager::join_game(){
     this->simbol = 'X';
     std::vector<int> values = this->queue->pop(this->simbol);
     this->board.put(values[0], values[1], values[2]);
-
 }
 
 void ClientManager::play(){
