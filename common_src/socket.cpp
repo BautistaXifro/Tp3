@@ -180,8 +180,6 @@ int Socket::receive(char* buffer, int msg_length){
 
 void Socket::close() {
     shutdown(this->fd, SHUT_RDWR);
-    ::close(this->fd);
-    this->fd = -1;
 }
 
 Socket::~Socket() {

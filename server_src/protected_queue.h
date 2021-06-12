@@ -8,15 +8,16 @@
 
 class ProtectedQueue{
     private:
-        std::queue<std::vector<int>> queue;
+        std::queue<std::vector<int>> queueX;
+        std::queue<std::vector<int>> queueO;
         std::mutex queue_mutex;
         std::condition_variable cond_var;
     public:
         ProtectedQueue();
         ProtectedQueue(ProtectedQueue&& other);
         ProtectedQueue(const ProtectedQueue& other) = delete;
-        std::vector<int> pop();
-        void push(const std::vector<int>& values);
+        std::vector<int> pop(const char simbol);
+        void push(const std::vector<int>& values, const char simbol);
         ~ProtectedQueue();
 };
 #endif

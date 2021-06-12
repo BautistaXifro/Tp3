@@ -63,17 +63,20 @@ void ClientManager::join_game(){
     this->communicator.receive(game);
     this->map.find(game, this->queue);
     this->simbol = 'X';
-    
-    std::vector<int> values = this->queue->pop();
+    std::vector<int> values = this->queue->pop(this->simbol);
     this->board.put(values[0], values[1], values[2]);
+
 }
 
 void ClientManager::play(){
     std::vector<int> values = this->communicator.receive_play();
     values.push_back(this->simbol);
-    this->queue->push(values);
+    this->queue->push(values, this->simbol);
+
     if (this->board.put(values[0], values[1], this->simbol) == 1) return;
-    std::vector<int> otherPlayerValues = this->queue->pop();
+
+    std::vector<int> otherPlayerValues = this->queue->pop(this->simbol);
+
     this->board.put(otherPlayerValues[0], 
             otherPlayerValues[1], otherPlayerValues[2]);
 }
