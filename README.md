@@ -16,8 +16,8 @@ El main del servidor crea un thread ```Server``` el cual se encarga de *bindears
 Este thread cuando acepta clientes, por su parte, crea 1 thread, ```ClientManager```, por cada cliente que acepta. Esta clase se encarga de tener la conversación con el cliente
 y por lo tanto es quien maneja los inputs y outputs del juego. Para esto se ayuda de un ```ProtectedMap``` el cual se inicializó en ```Server``` y es donde se guardan todas las partidas
 que existen en el server, ```ProtectedQueue``` se utiliza para que dos clientes puedan jugar entre ellos, esta clase se encarga de ser una queue bloqueante la cual cuando un cliente
-hace su jugada ésta es mandada a la queue para que el otro thread ```ClientManager``` pueda hacer un pop y obtener esa jugada. Por ultimo existe la clase ```Board``` la cual
-es la encargada de mantener el tablero actualizarse por cada jugada y escanearse para informar si alguien gano o se empato.
+hace su jugada ésta es mandada a la queue para que el otro thread ```ClientManager``` pueda hacer un pop y obtener esa jugada. Tambien existe la clase ```Board``` la cual
+es la encargada de mantener el tablero actualizarse por cada jugada y escanearse para informar si alguien gano o se empato. Por último hace uso de la clase ```Communicator``` la cual es la encargada de mandar y recibir correctamente los mensajes a la clase ```Socket``` siguiendo el protocolo de comunicación.
 
 Del lado del cliente esto es mas sencillo ya que solo se utiliza una clase ```Client``` la cual se encarga de manejar la comunicación del cliente servidor de parte del cliente.
 
@@ -26,7 +26,16 @@ de los sockets que tanto cliente como servidor hacen uso.
 
 ## Diagrama de secuencia
 
-<br><p align="center"><img src="img/SequenceDiagram.jpeg"/></p>
+### Cliente
+<br><p align="center"><img src="img/SQClient.jpeg"/></p>
+
+### Server
+<br><p align="center"><img src="img/SQServer.jpeg"/></p>
+
+### ClientManager
+<br><p align="center"><img src="img/SQClientManager.jpeg"/></p>
+
+cabe destacar que esta secuencia es para cuando el cliente manda el comando **create** y luego **play**
 
 ## Conclusión
 En este tp pude darme cuenta de lo mucho que se puede hacer utilizando estos conceptos que se enseñaron hasta ahora. Si bien es un juego muy simple la idea de que pueda

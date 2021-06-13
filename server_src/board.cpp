@@ -20,8 +20,6 @@ Board::Board(){
             this->matrix[i].push_back(' ');
         }
     }
-    this->isMyTurn = true;
-    this->allowedToPrint = true;
 }
 
 Board::Board(Board&& other){
@@ -29,8 +27,6 @@ Board::Board(Board&& other){
     this->separator = std::move(other.separator);
     this->rows = std::move(other.rows);
     this->matrix = std::move(other.matrix);
-    this->isMyTurn = true;
-    this->allowedToPrint = true;
 }
 
 int Board::put(const int& column, const int& row, const char& charToInsert){
