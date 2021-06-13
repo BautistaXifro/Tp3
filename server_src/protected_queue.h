@@ -16,8 +16,10 @@ class ProtectedQueue{
         ProtectedQueue();
         ProtectedQueue(ProtectedQueue&& other);
         ProtectedQueue(const ProtectedQueue& other) = delete;
-        std::vector<int> pop(const char simbol);
-        void push(const std::vector<int>& values, const char simbol);
+        std::vector<int> popO();
+        std::vector<int> popX();
+        void pushO(const std::vector<int>& values);
+        void pushX(const std::vector<int>& values);
         ~ProtectedQueue();
 };
 #endif
