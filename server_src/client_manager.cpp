@@ -76,7 +76,6 @@ void ClientManager::play(){
         this->queue->pushO(values);
         if (this->board.put(values[0], values[1], this->simbol) == 1) return;
         otherPlayerValues = this->queue->popX();
-
     }else{
         this->queue->pushX(values);
         if (this->board.put(values[0], values[1], this->simbol) == 1) return;
